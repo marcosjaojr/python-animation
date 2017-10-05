@@ -37,7 +37,7 @@ def plot_all_faces(faces):
 
 def plot_vertice(i, vertices):
     (x, y, z) = vertices[i][0][0:3]
-    ax.text(x, y, z, str((x, y, z)))
+    ax.text(x, y, z, vertices[i][1])
     ax.scatter(x, y, z, c='#ffffff')
     print((vertices[i][1], str((x, y, z))))
 
@@ -50,10 +50,15 @@ def clean():
     vertice_ani.event_source.stop()
     ax.clear()
 
-def animate(event):
+def face_animate(event):
     clean()
     face_ani.frame_seq = face_ani.new_frame_seq()
     face_ani.event_source.start()
+
+def vertice_animate(event):
+    clean()
+    polygon = Polygon()
+    plot_all_faces(polygon.faces)
     vertice_ani.frame_seq = vertice_ani.new_frame_seq()
     vertice_ani.event_source.start()
 
@@ -94,23 +99,27 @@ def pers_proj(event):
     tables_fig.canvas.draw()
     plt.draw()
 
-axanimate = plt.axes([0.8, 0.05, 0.13, 0.075])
-banimate = Button(axanimate, 'Animar')
-banimate.on_clicked(animate)
+axfaceanimate = plt.axes([0.8, 0.05, 0.15, 0.075])
+bfaceanimate = Button(axfaceanimate, 'Animar Face')
+bfaceanimate.on_clicked(face_animate)
 
-axobliqproj = plt.axes([0.68, 0.05, 0.1, 0.075])
+axverticeanimate = plt.axes([0.64, 0.05, 0.15, 0.075])
+bverticeanimate = Button(axverticeanimate, 'Animar Ver.')
+bverticeanimate.on_clicked(vertice_animate)
+
+axobliqproj = plt.axes([0.53, 0.05, 0.1, 0.075])
 bobliqproj = Button(axobliqproj, 'Oblíqua')
 bobliqproj.on_clicked(obliq_proj)
 
-axisoproj = plt.axes([0.5, 0.05, 0.15, 0.075])
+axisoproj = plt.axes([0.37, 0.05, 0.15, 0.075])
 bisoproj = Button(axisoproj, 'Isométrica')
 bisoproj.on_clicked(iso_proj)
 
-axrestore = plt.axes([0.3, 0.05, 0.13, 0.075])
+axrestore = plt.axes([0.23, 0.05, 0.13, 0.075])
 brestore = Button(axrestore, 'Restaurar')
 brestore.on_clicked(restore_polygon)
 
-axpersproj = plt.axes([0.1, 0.05, 0.13, 0.075])
+axpersproj = plt.axes([0.09, 0.05, 0.13, 0.075])
 bpersproj = Button(axpersproj, 'Perspectiva')
 bpersproj.on_clicked(pers_proj)
 
