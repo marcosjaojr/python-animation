@@ -6,7 +6,11 @@ from matplotlib.widgets import Button
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from Polygon import Polygon
-import time
+
+tables_fig, matrix_ax = plt.subplots(1,1)
+matrix_collabel = ("", "", "", "")
+matrix_ax.axis('tight')
+matrix_ax.axis('off')
 
 fig = plt.figure()
 ax = fig.gca(projection='3d', facecolor='#B2EBF2')
@@ -25,15 +29,17 @@ def plot_face(i, faces):
     edges = Line3DCollection([list(zip(xs, ys, zs))], facecolors=color, linewidths=0)
     edges.set_alpha(0.7)
     ax.add_collection3d(edges)
+    print(('F{}'.format(i+1), str(face)))
 
 def plot_all_faces(faces):
     for i in range(len(faces)):
         plot_face(i, faces)
 
 def plot_vertice(i, vertices):
-    (x, y, z) = vertices[i][0:3]
+    (x, y, z) = vertices[i][0][0:3]
     ax.text(x, y, z, str((x, y, z)))
     ax.scatter(x, y, z, c='#ffffff')
+    print((vertices[i][1], str((x, y, z))))
 
 def plot_all_vertices(vertices):
     for i in range(len(vertices)):
@@ -61,25 +67,31 @@ def restore_polygon(event):
 def iso_proj(event):
     clean()
     polygon = Polygon()
-    polygon.iso_proj()
+    matrix = polygon.iso_proj()
     plot_all_faces(polygon.faces)
     plot_all_vertices(polygon.vertices)
+    matrix_ax.table(cellText=matrix, colLabels=matrix_collabel, loc='center')
+    tables_fig.canvas.draw()
     plt.draw()
 
 def obliq_proj(event):
     clean()
     polygon = Polygon()
-    polygon.obliq_proj()
+    matrix = polygon.obliq_proj()
     plot_all_faces(polygon.faces)
     plot_all_vertices(polygon.vertices)
+    matrix_ax.table(cellText=matrix, colLabels=matrix_collabel, loc='center')
+    tables_fig.canvas.draw()
     plt.draw()
 
 def pers_proj(event):
     clean()
     polygon = Polygon()
-    polygon.pers_proj()
+    matrix = polygon.pers_proj()
     plot_all_faces(polygon.faces)
     plot_all_vertices(polygon.vertices)
+    matrix_ax.table(cellText=matrix, colLabels=matrix_collabel, loc='center')
+    tables_fig.canvas.draw()
     plt.draw()
 
 axanimate = plt.axes([0.8, 0.05, 0.13, 0.075])

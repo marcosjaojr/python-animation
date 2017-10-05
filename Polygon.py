@@ -2,42 +2,42 @@ from PolygonFace import Face
 import numpy as np
 
 VERTICES = [
-    [-1, -1, 0],
-    [-1, 0, 0],
-    [0, 0, 0],
-    [0, 1, 0],
-    [1, 2, 0],
-    [1, 3, 0],
-    [2, 3, 0],
-    [2, 2, 0],
-    [3, 1, 0],
-    [3, 0, 0],
-    [4, 0, 0],
-    [4, -1, 0],
-    [3, -1, 0],
-    [2, -2, 0],
-    [2, -3, 0],
-    [1, -3, 0],
-    [1, -2, 0],
-    [0, -1, 0],
-    [-1, -1, 4],
-    [-1, 0, 4],
-    [0, 0, 4],
-    [0, 1, 4],
-    [1, 2, 4],
-    [1, 3, 4],
-    [2, 3, 4],
-    [2, 2, 4],
-    [3, 1, 4],
-    [3, 0, 4],
-    [4, 0, 4],
-    [4, -1, 4],
-    [3, -1, 4],
-    [2, -2, 4],
-    [2, -3, 4],
-    [1, -3, 4],
-    [1, -2, 4],
-    [0, -1, 4]
+    ([-1, -1, 0], 'V1'),
+    ([-1, 0, 0], 'V2'),
+    ([0, 0, 0], 'V3'),
+    ([0, 1, 0], 'V4'),
+    ([1, 2, 0], 'V5'),
+    ([1, 3, 0], 'V6'),
+    ([2, 3, 0], 'V7'),
+    ([2, 2, 0], 'V8'),
+    ([3, 1, 0], 'V9'),
+    ([3, 0, 0], 'V10'),
+    ([4, 0, 0], 'V11'),
+    ([4, -1, 0], 'V12'),
+    ([3, -1, 0], 'V13'),
+    ([2, -2, 0], 'V14'),
+    ([2, -3, 0], 'V15'),
+    ([1, -3, 0], 'V16'),
+    ([1, -2, 0], 'V17'),
+    ([0, -1, 0], 'V18'),
+    ([-1, -1, 4], 'V19'),
+    ([-1, 0, 4], 'V20'),
+    ([0, 0, 4], 'V21'),
+    ([0, 1, 4], 'V22'),
+    ([1, 2, 4], 'V23'),
+    ([1, 3, 4], 'V24'),
+    ([2, 3, 4], 'V25'),
+    ([2, 2, 4], 'V26'),
+    ([3, 1, 4], 'V27'),
+    ([3, 0, 4], 'V28'),
+    ([4, 0, 4], 'V29'),
+    ([4, -1, 4], 'V30'),
+    ([3, -1, 4], 'V31'),
+    ([2, -2, 4], 'V32'),
+    ([2, -3, 4], 'V33'),
+    ([1, -3, 4], 'V34'),
+    ([1, -2, 4], 'V35'),
+    ([0, -1, 4], 'V36')
 ]
 
 RAW_FACES = [
@@ -93,23 +93,29 @@ class Polygon:
         self._update_faces()
     
     def iso_proj(self):
-        homogeined = [[item[0], item[1], item[2], 1] for item in self.vertices]
-        self.vertices = (np.matrix(homogeined)*MISO).tolist()
+        homogeined = [[item[0][0], item[0][1], item[0][2], 1] for item in self.vertices]
+        vertices = (np.matrix(homogeined)*MISO).tolist()
+        self.vertices = [(vertices[i], self.vertices[i][1]) for i in range(len(self.vertices))]
         self._update_faces()
+        return MISO.tolist()
 
     def obliq_proj(self):
-        homogeined = [[item[0], item[1], item[2], 1] for item in self.vertices]
-        self.vertices = (np.matrix(homogeined)*MOBL).tolist()
+        homogeined = [[item[0][0], item[0][1], item[0][2], 1] for item in self.vertices]
+        vertices = (np.matrix(homogeined)*MOBL).tolist()
+        self.vertices = [(vertices[i], self.vertices[i][1]) for i in range(len(self.vertices))]
         self._update_faces()
+        return MOBL.tolist()
 
     def pers_proj(self):
-        homogeined = [[item[0], item[1], item[2], 1] for item in self.vertices]
-        self.vertices = (np.matrix(homogeined)*MPER).tolist()
+        homogeined = [[item[0][0], item[0][1], item[0][2], 1] for item in self.vertices]
+        vertices = (np.matrix(homogeined)*MPER).tolist()
+        self.vertices = [(vertices[i], self.vertices[i][1]) for i in range(len(self.vertices))]
         self._update_faces()
+        return MPER.tolist()
 
     def get_ordered_vertices(self):
         return [item for face in self.faces for item in face.get_vertices()]
 
     def _update_faces(self):
         self.faces = [Face([self.vertices[i-1]
-            for i in face[0]], face[1]) for face in RAW_FACES]
+                      for i in face[0]], face[0], face[1]) for face in RAW_FACES]
