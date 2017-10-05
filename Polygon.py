@@ -107,6 +107,9 @@ class Polygon:
         self.vertices = (np.matrix(homogeined)*MPER).tolist()
         self._update_faces()
 
+    def get_ordered_vertices(self):
+        return [item for face in self.faces for item in face.get_vertices()]
+
     def _update_faces(self):
         self.faces = [Face([self.vertices[i-1]
             for i in face[0]], face[1]) for face in RAW_FACES]
